@@ -10,3 +10,8 @@ image = Image.open("space.jpg")
 
 # prep image
 inputs = processor(image, return_tensors="pt")
+
+# gen captions
+outputs = model.generate(**inputs)
+caption = processor.decode(outputs[0],skip_special_tokens=True)
+print("Generated Caption:", caption)
