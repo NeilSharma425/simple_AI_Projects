@@ -1,4 +1,4 @@
-#import gradio as gr
+import gradio as gr
 from transformers import BlipProcessor, BlipForConditionalGeneration
 from PIL import Image
 
@@ -6,8 +6,7 @@ from PIL import Image
 processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
 def generate_caption(image): 
-    # Load image
-    image = Image.open("space.jpg")
+
     # prep image
     inputs = processor(image, return_tensors="pt")
     # gen captions
@@ -20,5 +19,12 @@ def caption_img(img):
         return caption
     except Exception as e:
         return f"Error: {str(e)}"
-    
-caption_img("space.jpg")
+
+iface = gr.Interface(
+    fn = caption_img,
+    inputs = gr.Image(type="pil"),
+    outputs = "text",
+    title = "BLIP Image Caption",
+    description = "Upload image to generate a caption"
+)
+iface.launch(share=True)
